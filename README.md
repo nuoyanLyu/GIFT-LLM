@@ -101,6 +101,8 @@ Training scripts in `scripts` directory includes:
 - $\text{F+I}_3$ tasks: mixed training `FI3_mixed.sh` and nested training `FI3_nested.sh`.
 - $\text{I}_2$ tasks in ablation study: mixed training `I2_mixed.sh` and nested training `I2_nested.sh`.
 
+For example, run `./scripts/math.sh` in `GIFT-LLM` directory to train the model on the math task.
+
 To convert the fsdp2 checkpoint models to huggingface format, please use the `merge.sh` script.
 
 > We also provide the `monitor.sh` script to iteratively convert the old checkpoint files to huggingface models. Change the path in `monitor.sh` and `merge_dl.sh` to run this.
@@ -153,7 +155,7 @@ If you find GIFT useful, we would appreciate it if you cite our work:
 ---
 ## Acknowledgement
 
-This project is built on RAGEN framework(https://github.com/mll-lab-nu/RAGEN), based on VeRL framework(https://github.com/volcengine/verl). 
+This project is built on RAGEN framework(https://github.com/mll-lab-nu/RAGEN), based on VeRL framework(https://github.com/volcengine/verl). We change the core algorithms in RAGEN to support GIFT training.
 
 
 ---
@@ -161,5 +163,4 @@ This project is built on RAGEN framework(https://github.com/mll-lab-nu/RAGEN), b
 
 This project is released under the MIT License.
 
-It includes code derived from the RAGEN framework, which is also licensed under
-the MIT License. 
+It includes code derived from the RAGEN framework, which is also licensed under the MIT License. 

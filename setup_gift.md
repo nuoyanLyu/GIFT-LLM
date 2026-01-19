@@ -37,6 +37,12 @@ git submodule update --init --recursive
 > This project depends on a pinned commit of `verl@1e47e41`.
 > Other versions of verl are not compatible with the current codebase.
 
+Then install VeRL:
+```shell
+cd verl
+pip install -e .
+```
+
 We use `swanlab` to log the training process https://swanlab.cn/. Please register online and login through commands:
 ```shell
 swanlab login
