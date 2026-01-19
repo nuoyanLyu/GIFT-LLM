@@ -28,18 +28,14 @@ pip install flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp312-cp312-linux_x
 
 > Optional: You can install the flash-infer to boost the training. Similarly, we recomment to download the wheel file from the official website https://github.com/flashinfer-ai/flashinfer/releases. 
 > From our version, we use the flash-infer 0.2.2.post1, and the file name is `flashinfer_python-0.2.2.post1+cu124torch2.6-cp38-abi3-linux_x86_64.whl`.
-
-Install verl (pinned version)
+Initialize and fetch submodule  VeRL.
 ```shell
-git clone https://github.com/volcengine/verl.git
-cd verl
-git checkout 1e47e41
-cd ..
+git submodule update --init --recursive
 ```
 
 > ⚠️ Important
-> This project depends on a pinned commit of verl.
-> Newer versions of verl are not compatible with the current codebase.
+> This project depends on a pinned commit of `verl@1e47e41`.
+> Other versions of verl are not compatible with the current codebase.
 
 We use `swanlab` to log the training process https://swanlab.cn/. Please register online and login through commands:
 ```shell
