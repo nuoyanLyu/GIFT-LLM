@@ -28,6 +28,7 @@ pip install flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp312-cp312-linux_x
 
 > Optional: You can install the flash-infer to boost the training. Similarly, we recomment to download the wheel file from the official website https://github.com/flashinfer-ai/flashinfer/releases. 
 > From our version, we use the flash-infer 0.2.2.post1, and the file name is `flashinfer_python-0.2.2.post1+cu124torch2.6-cp38-abi3-linux_x86_64.whl`.
+
 Initialize and fetch submodule  VeRL.
 ```shell
 git submodule update --init --recursive
