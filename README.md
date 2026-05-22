@@ -135,24 +135,6 @@ Then please log this new env in `ragen/env/__init__.py` and `config/envs.yaml`.
 The nested training framework is in `compose_new` environments. Edit the `base_env_list` variables to change the nested sub-task. 
 
 ---
-
-## Citation
-
-If you find GIFT useful, we would appreciate it if you cite our work:
-
-```bibtex
-@misc{lyu2026giftgamesinformaltraining,
-      title={GIFT: Games as Informal Training for Generalizable LLMs}, 
-      author={Nuoyan Lyu and Bingbing Xu and Weihao Meng and Yige Yuan and Yang Zhang and Zhiyong Huang and Tat-Seng Chua and Huawei Shen},
-      year={2026},
-      eprint={2601.05633},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2601.05633}, 
-}
-```
-
----
 ## Acknowledgement
 
 This project is built on RAGEN framework(https://github.com/mll-lab-nu/RAGEN), based on VeRL framework(https://github.com/volcengine/verl). We change the core algorithms in RAGEN to support GIFT training.
