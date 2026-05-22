@@ -5,7 +5,6 @@ This repository contains the official implementation of **GIFT**, a framework th
 ![GIFT Overview](images/intro.png)
 
 **2026.1.15**: We release the official implementation of GIFT paper.
-**2026.1.9**: The paper is released on ArXiv. https://arxiv.org/abs/2601.05633
 
 ---
 
