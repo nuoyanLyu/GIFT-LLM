@@ -1,6 +1,7 @@
 # prompt evaluate部分参考 https://github.com/allenai/CommonGen-Eval/tree/main
 import json
 from collections import Counter
+
 from vllm import LLM, SamplingParams
 from verl.utils import hf_tokenizer
 
@@ -17,16 +18,20 @@ import os
 import logging
 import time
 
-root_path = '/root/autodl-tmp'
+# root_path = '/root/autodl-tmp'
+root_path = '/data1/lvnuoyan/llm_model/gift'
+data_path = '/data1/lvnuoyan'
 llm_judge = 'gpt-4o'
 batch_size = 16
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", type=str, default="nash-math")
 parser.add_argument("--model_name", type=str, default="nm150")
+parser.add_argument("--device", type=str, default='0')
 args = parser.parse_args()
 model_path = args.model_path
 model_name = args.model_name
+device = args.device
 tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 
 '''
@@ -37,7 +42,7 @@ tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 不考虑spacy进行测试等情况
 "human_annotations"列表，每一个元素是一个字典，"ref"为对应的人类标注数据
 '''
-dataset = json.load(open(f"{root_path}/reasoning/commongen_lite_eval/commongen_hard.json"))
+dataset = json.load(open(f"{data_path}/reasoning/commongen_lite_eval/commongen_hard.json"))
 
 gt_count = [len(data['human_annotations']) for data in dataset]
 print('no human_annotations', gt_count.count(0))
@@ -46,7 +51,7 @@ dataset = [data for data in dataset if len(data['human_annotations']) > 0]
 
 def load_llm():
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = device
     # tokenizer = AutoTokenizer.from_pretrained(config.actor_rollout_ref.model.path)
     model = f'{root_path}/{model_path}/{model_name}'
     # model = f"{root_path}/{model_name}"
@@ -313,9 +318,11 @@ def save_log(model_name, accs_list, output_file="reason_test/commongen-log.txt")
 if __name__ == '__main__':
     os.environ["VLLM_DISABLE_PROGRESS_BAR"] = "1"
     os.environ["VLLM_LOGGING_LEVEL"] = "ERROR"
+    os.environ["CUDA_VISIBLE_DEVICES"] = '5'
 
     logging.getLogger("vllm").setLevel(logging.ERROR)
-    path0 = f'/root/autodl-tmp/reasoning'
+    # path0 = f'/root/autodl-tmp/reasoning'
+    path0 = f'/data1/lvnuoyan/reasoning'
     llm, sampling_params = load_llm()
     answers, acc_list = test_gen(llm, sampling_params, dataset)
     # 保存测试结果到日志文件

@@ -14,14 +14,17 @@ from datasets import load_dataset
 import random
 import string
 
-root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+# root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+root_path = '/data1/lvnuoyan/llm_model/gift'
 batch_size = 16
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", type=str, default="nash-new")
 parser.add_argument("--model_name", type=str, default="nash50")
+parser.add_argument("--device", type=str, default='0')
 args = parser.parse_args()
 model_path = args.model_path
 model_name = args.model_name
+device = args.device
 tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 # tokenizer = hf_tokenizer(f"{root_path}/{model_name}")
 time_str = time.strftime("%m-%d-%H-%M", time.localtime())
@@ -32,7 +35,7 @@ time_str = time.strftime("%m-%d-%H-%M", time.localtime())
 
 def load_llm():
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = device
     # tokenizer = AutoTokenizer.from_pretrained(config.actor_rollout_ref.model.path)
     model = f'{root_path}/{model_path}/{model_name}'
     # model = f"{root_path}/{model_name}"
@@ -244,9 +247,11 @@ def save_sample_results(model_name, accs, answers, mmlu_pro_data,
 if __name__ == '__main__':
     os.environ["VLLM_DISABLE_PROGRESS_BAR"] = "1"
     os.environ["VLLM_LOGGING_LEVEL"] = "ERROR"
+    os.environ["CUDA_VISIBLE_DEVICES"] = '5'
 
     logging.getLogger("vllm").setLevel(logging.ERROR)
-    path0 = f'/root/autodl-tmp/reasoning'
+    # path0 = f'/root/autodl-tmp/reasoning'
+    path0 = f'/data1/lvnuoyan/reasoning'
     # 加载 MMLU 数据集，全部数据集all、对应数据字段test
     # mmlu = load_dataset(f"{path0}/mmlu/", 'all')['test']
     mmlu_pro = load_dataset(f"{path0}/MMLU-Pro")['test']

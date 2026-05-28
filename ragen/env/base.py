@@ -243,7 +243,7 @@ class EnvPlayer():
                     'type': 'qwen',
                     'client': client,
                     'model': f"{model_path}/{model_name}",
-                    'request_timeout': 5
+                    'request_timeout': 10
                 })
             elif '/' in model_name:
                 self.players.append({

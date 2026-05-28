@@ -120,7 +120,7 @@ logs/
 # api-key files
 ragen/env/api-keys.json
 
-# files for testing
+# 一些测试脚本等信息
 test_sh.sh
 my_test/
 reason_test/*.json
@@ -130,5 +130,6 @@ reason_test/lm-eval/
 reason_test/*.txt
 # test result files
 reason_test/results/
-# wheel files
-*.whl
+
+# git shell
+git_retry.sh
