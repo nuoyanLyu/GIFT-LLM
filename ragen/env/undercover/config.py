@@ -20,7 +20,7 @@ class UndercoverEnvConfig:
              {'model_name': 'Qwen3-14B', 'port': '1414'},
              {'model_name': 'Qwen3-14B', 'port': '1414'}]
     )
-    model_path: str = '/root/autodl-fs'
+    model_path: str = '/data1/model' # '/root/autodl-fs'
     env_max_tokens: int = 600
     simplify_prompt: str = "\nSummarize the conversation history of each player in format: `Player x: [conversation]\n`. Keep the summary ** under 100 words. **"
     init_prompts: List[str] = field(

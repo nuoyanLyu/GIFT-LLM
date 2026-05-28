@@ -2,25 +2,30 @@
 
 This repository contains the official implementation of **GIFT**, a framework that leverages **game-based informal training** to improve the **generalization** of large language models.
 
-![GIFT Overview](images/intro.png)
+![GIFT Overview](images/intro-cst2.png)
 
-**2026.1.15**: We release the official implementation of GIFT paper.
+**2026.5.28**: We release the official implementation of GIFT paper.
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Method](#method)
-- [Repository Structure](#repository-structure)
-- [Installation](#installation)
-- [Quickstart](#quickstart)
-      - [Training](#training)
-      - [Evaluation](#evaluation)
-- [Adding New Games / Tasks](#adding-new-games--tasks)
-- [Citation](#citation)
-- [Acknowledgement](#acknowledgement)
-- [License](#license)
+- [GIFT: Games as Informal Training for Generalizable LLMs](#gift-games-as-informal-training-for-generalizable-llms)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Method](#method)
+    - [Formal vs. Informal Learning](#formal-vs-informal-learning)
+    - [Coordinated Subtask Training](#coordinated-subtask-training)
+  - [Repository Structure](#repository-structure)
+  - [Installation](#installation)
+  - [Quickstart](#quickstart)
+    - [Training](#training)
+    - [Evaluation](#evaluation)
+  - [Adding New Games / Tasks](#adding-new-games--tasks)
+    - [Adding New CST Tasks](#adding-new-cst-tasks)
+  - [Citation](#citation)
+  - [Acknowledgement](#acknowledgement)
+  - [License](#license)
 
 ---
 
@@ -30,7 +35,7 @@ This repository contains the official implementation of **GIFT**, a framework th
 
 **Key ideas:**
 - **Games as informal training**: interaction, practice, and feedback in multi-step environments.
-- **Nested training**: a composite objective that encourages **joint success** across subtasks rather than single-task collapse.
+- **Coordinated Subtask Training**: replace coarse mixed updates with sequential subtask-specific updates, preserving task-local RL signals and introducing implicit cross-task gradient coordination.
 - **Generalization focus**: evaluate on general abilities in addition to in-domain math and game success.
 
 ---
@@ -41,13 +46,13 @@ This repository contains the official implementation of **GIFT**, a framework th
 - **Formal learning**: structured, goal-oriented tasks (e.g., math).
 - **Informal learning**: learning in rich environments via interaction, practice, and feedback (e.g., games).
 
-### Nested Training
+### Coordinated Subtask Training
 
-In **mixed training**, trajectories typically correspond to a single task; learning signals may become dominated by the easiest subtask and can harm joint generalization.
+**Mixed training** can blur task-specific learning signals and provides no explicit guidance for coordinating task-gradient directions.
 
-In **nested training**, each training episode/trajectory can include **multiple subtasks** with a **joint success** condition, encouraging balanced learning and improved stability.
+**Coordinated Subtask Training** replaces a single mixed update with sequential subtask-specific updates, separating heterogeneous RL signals while implicitly promoting coordination among subtasks. 
 
-![Architecture](images/architecture.png)
+![Architecture](images/main.png)
 
 ---
 
@@ -88,17 +93,17 @@ We use the `EnvPlayer` class in `ragen/env/base.py` to initialize and call oppon
 Environments for training each task are in `ragen/env/` directory, including:
 - formal learning: math env `math_lv3to5`.
 - informal learning: Matrix Games `nash_new`, TicTacToe `tictactoe`, and Who's the Spy `undercover`.
-- nested training environment `compose_new`.
+- CST environment `batch`.
 
 The mixed training can be constructed directly in yaml configs, such as `config/_14_FI1_mixed.yaml`.
 
 ### Training
 Training scripts in `scripts` directory includes:
 - single tasks: formal learning, math `math.sh`, informal learning, matrix games `nash.sh`, TicTacToe `tictactoe.sh`, and Who's the Spy `undercover.sh`.
-- $\text{F+I}_1$ tasks: mixed training `FI1_mixed.sh` and nested training `FI1_nested.sh`.
-- $\text{F+I}_2$ tasks: mixed training `FI2_mixed.sh` and nested training `FI2_nested.sh`.
-- $\text{F+I}_3$ tasks: mixed training `FI3_mixed.sh` and nested training `FI3_nested.sh`.
-- $\text{I}_2$ tasks in ablation study: mixed training `I2_mixed.sh` and nested training `I2_nested.sh`.
+- $\text{F+I}_1$ tasks: mixed training `FI1_mixed.sh` and CST `FI1_CST.sh`.
+- $\text{F+I}_2$ tasks: mixed training `FI2_mixed.sh` and CST `FI2_CST.sh`.
+- $\text{F+I}_3$ tasks: mixed training `FI3_mixed.sh` and CST `FI3_CST.sh`.
+- $\text{I}_2$ tasks in ablation study: mixed training `I2_mixed.sh` and CST `I2_CST.sh`.
 
 For example, run `./scripts/math.sh` in `GIFT-LLM` directory to train the model on the math task.
 
@@ -130,8 +135,17 @@ Then please log this new env in `ragen/env/__init__.py` and `config/envs.yaml`.
 
 > Optional: Run `python -m ragen.env.[Your ENV Name].env` to test your env codes. 
 
-### Adding New Nested Training Tasks
-The nested training framework is in `compose_new` environments. Edit the `base_env_list` variables to change the nested sub-task. 
+### Adding New CST Tasks
+The CST framework is in `batch` environments. Edit the `base_env_list` variables to change the CST sub-task. 
+
+The `k_list` variable specifies the number of local update steps for each sub-environment. For example, for F+I3 training with the 7B-base model, setting `k_list: [1, 1, 1, 1]` updates each sub-environment at every step.
+
+---
+
+## Citation
+
+TBD
+
 
 ---
 ## Acknowledgement

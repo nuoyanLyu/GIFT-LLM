@@ -10,15 +10,19 @@ from verl.utils import hf_tokenizer
 import argparse
 import random
 
-root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+# root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+
+root_path = '/data1/lvnuoyan/llm_model/gift'
 batch_size = 16
 # model_path = 'math'
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", type=str, default="")
 parser.add_argument("--model_name", type=str, default="Qwen2.5-1.5B-Instruct")
+parser.add_argument("--device", type=str, default='0')
 args = parser.parse_args()
 model_path = args.model_path
 model_name = args.model_name
+device = args.device
 tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 # tokenizer = hf_tokenizer(f"{root_path}/{model_name}")
 time_str = time.strftime("%m-%d-%H-%M", time.localtime())
@@ -29,7 +33,7 @@ time_str = time.strftime("%m-%d-%H-%M", time.localtime())
 
 def load_llm():
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = device
     os.environ["VLLM_DISABLE_PROGRESS_BAR"] = "1"
     os.environ["VLLM_LOGGING_LEVEL"] = "ERROR"
 
@@ -205,7 +209,8 @@ def save_sample_results(model_name, accs_strict, accs_flex, answers, math_data,
 
 # 复制出问题了，需要改回mathlv3-5的数据集
 if __name__ == '__main__':
-    path0 = f'/root/autodl-tmp/reasoning'
+    # path0 = f'/root/autodl-tmp/reasoning'
+    path0 = f'/data1/lvnuoyan/reasoning'
     # math = datasets.load_dataset("parquet", 
     #               data_files={'train': path0 + '/gsm8k/train.parquet', 'test': path0 + '/gsm8k/test.parquet'})
     # # print(math['test']['prompt'][0])

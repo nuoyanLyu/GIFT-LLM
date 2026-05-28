@@ -14,7 +14,8 @@ from vllm import LLM, SamplingParams
 from verl.utils import hf_tokenizer
 import argparse
 
-root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+# root_path = '/root/autodl-tmp'  # '/data1/lvnuoyan' 
+root_path = '/data1/lvnuoyan/llm_model/gift'
 test_round = 100
 config = UndercoverEnvConfig(
     max_env_try=1,  # 修改最大尝试次数
@@ -28,15 +29,18 @@ config = UndercoverEnvConfig(
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", type=str, default="undercover")
 parser.add_argument("--model_name", type=str, default="Qwen2.5-1.5B-Instruct")
+parser.add_argument("--device", type=str, default='0')
+
 args = parser.parse_args()
 model_path = args.model_path
 model_name = args.model_name
+device = args.device
 tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 # tokenizer = hf_tokenizer(f"{root_path}/{model_name}")
 
 def load_llm():
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = device
     # tokenizer = AutoTokenizer.from_pretrained(config.actor_rollout_ref.model.path)
     model = f'{root_path}/{model_path}/{model_name}'
     # model = f"{root_path}/{model_name}"

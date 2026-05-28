@@ -14,7 +14,7 @@ pandas
 pybind11
 ray>=2.10
 tensordict>=0.8.0,<0.9.0
-transformers==4.57.6
+transformers
 vllm==0.8.2
 wandb
 gymnasium
@@ -27,11 +27,6 @@ debugpy
 
 together
 anthropic
-
-# Add external packages
-nashpy
-math-verify[antlr4_9_3]
-swanlab
 
 # This is optional, but needs to be installed with main requirements if you want to use webshop
 # -r external/webshop-minimal/requirements.txt

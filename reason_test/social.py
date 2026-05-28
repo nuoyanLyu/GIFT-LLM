@@ -10,31 +10,35 @@ import os
 import logging
 import time
 
-root_path = '/root/autodl-tmp'
+# root_path = '/root/autodl-tmp'
+root_path = '/data1/lvnuoyan/llm_model/gift'
 batch_size = 16
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", type=str, default="nash-math")
 parser.add_argument("--model_name", type=str, default="Qwen2.5-1.5B-Instruct")
+parser.add_argument("--device", type=str, default='0')
 args = parser.parse_args()
 model_path = args.model_path
 model_name = args.model_name
+device = args.device
 tokenizer = hf_tokenizer(f"{root_path}/{model_path}/{model_name}")
 # tokenizer = hf_tokenizer(f"{root_path}/{model_name}")
 
 # jsonl不能直接读取，每一行是一个单独的json对象
 # test_data = json.load(open(f"{root_path}/reasoning/socialiqa-train-dev/dev.jsonl"))
 social = []
-with open(f"{root_path}/reasoning/socialiqa-train-dev/dev.jsonl", "r") as f:
+path0 = '/data1/lvnuoyan'
+with open(f"{path0}/reasoning/socialiqa-train-dev/dev.jsonl", "r") as f:
     for line in f:
         social.append(json.loads(line))
-with open(f"{root_path}/reasoning/socialiqa-train-dev/dev-labels.lst", "r") as f:
+with open(f"{path0}/reasoning/socialiqa-train-dev/dev-labels.lst", "r") as f:
     label_all = f.read().splitlines()
 label_all = [int(l) - 1 for l in label_all]
 
 def load_llm():
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = device
     # tokenizer = AutoTokenizer.from_pretrained(config.actor_rollout_ref.model.path)
     model = f'{root_path}/{model_path}/{model_name}'
     # model = f"{root_path}/{model_name}"
@@ -237,9 +241,11 @@ def save_log(model_name, accs_list, output_file="reason_test/socialIQA-log.txt")
 if __name__ == '__main__':
     os.environ["VLLM_DISABLE_PROGRESS_BAR"] = "1"
     os.environ["VLLM_LOGGING_LEVEL"] = "ERROR"
+    os.environ["CUDA_VISIBLE_DEVICES"] = '5'
 
     logging.getLogger("vllm").setLevel(logging.ERROR)
-    path0 = f'/root/autodl-tmp/reasoning'
+    # path0 = f'/root/autodl-tmp/reasoning'
+    path0 = f'/data1/lvnuoyan/reasoning'
     llm, sampling_params = load_llm()
     answers, acc_list = test_social(llm, sampling_params, social, label_all)
     # 保存测试结果到日志文件
